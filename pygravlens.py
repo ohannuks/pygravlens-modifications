@@ -478,6 +478,22 @@ class lensplane:
 
     def __init__(self,ID,parr=[],kappa=0,gammac=0,gammas=0,Dl=0.5,
         map_scale=1,map_align='center',map_bound='periodic'):
+        ''' initialize a lens plane 
+
+        Parameters:
+        ID: string identifying mass model (for example: 'ptmass' (point mass), 'SIS' (singular isothermal sphere))
+        parr: list of parameters for the mass model (for example for point mass: [x0,y0,thetaE])
+        kappa: external convergence
+        gammac: external convergence
+        gammas: external shear
+        Dl: comoving distance to the lens
+        map_scale: scaling factor for kappa map
+        map_align: alignment of kappa map
+        map_bound: boundary mode for kappa map
+
+        Returns:
+        None
+        '''
 
         # store the parameters
         self.ID = ID
@@ -1230,6 +1246,27 @@ class lensmodel:
         return diff@diff
 
     def findimg(self,u,plane=-1,Dsnew=None):
+        ''' Find images of a source or sources
+
+        Parameters
+        ----------
+        u : array-like
+            Source position(s)
+        plane : int
+            Plane to stop at; -1 means go all the way to the source
+        Dsnew : float or array-like
+            New source distance(s)
+
+        Returns
+        -------
+        imgall : list of array-like
+            Image position(s) [imgall[0] is the first source's images]
+        muall : list of float
+            Magnification(s)
+        dtall : list of float
+            Differential time delay(s)
+        '''
+
         if self.griddone==False:
             print('Error: tiling has not been completed')
             return [],[],[]
@@ -1312,6 +1349,22 @@ class lensmodel:
     ##################################################################f
 
     def totmag(self,u,plane=-1,Dsnew=None):
+        ''' Find total magnification of a source or sources
+
+        Parameters
+        ----------
+        u : array-like
+            Source position(s)
+        plane : int
+            Plane to stop at; -1 means go all the way to the source
+        Dsnew : float or array-like
+            New source distance(s)
+
+        Returns
+        -------
+        muall : list of float
+            Total magnification(s)
+        '''
         imgarr,muarr,dtarr = self.findimg(u,plane=plane,Dsnew=Dsnew)
         srcarr = np.array(u)
         if srcarr.ndim==1:
